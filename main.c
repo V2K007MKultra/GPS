@@ -64,7 +64,11 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+int _write(int file, char *ptr, int len)
+{
+	HAL_UART_Transmit(&huart3, (uint8_t*)ptr, len, HAL_MAX_DELAY);
+	return len;
+}
 /* USER CODE END 0 */
 
 /**
@@ -119,13 +123,22 @@ int main(void)
 	  			HAL_Delay(250);
 	  			GNSS_GetPVTData(&GNSS_Handle);
 	  			GNSS_ParseBuffer(&GNSS_Handle);
+	  			 HAL_Delay(250);
+	  			           GNSS_SetMode(&GNSS_Handle,Automotiv);
+	  			           HAL_Delay(250);
+	  			         printf("Latitude: %f \r\n", GNSS_Handle.fLat);
+	  			         			printf("Longitude: %f \r\n",(float) GNSS_Handle.lon / 10000000.0);
+	  			         		 printf("Latitude");
+	  			      		 HAL_Delay(1000);
 	  			Timer = HAL_GetTick();
 	  }
 	             OLED_Reset_Display(&oled); // resets a buffer send to graphic memory
 
-	             OLED_Add_char(&oled, 'V'); // add 'V' character
+	             OLED_Add_char(&oled, 'P'); // add 'V' character
 	             OLED_Next_Line(&oled); // go to next line
-	             OLED_Add_number(&oled, 1234567890); // add number 1234567890
+
+
+	             OLED_Add_Float(&oled,3,14); // add number 1234567890
 	             OLED_Draw(&oled); // puts a pixels from buffer on the screen
     /* USER CODE BEGIN 3 */
   }
